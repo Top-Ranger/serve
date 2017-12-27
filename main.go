@@ -21,6 +21,10 @@ func main() {
 
 	flag.Parse()
 
+	if flag.NArg() == 0 {
+		log.Fatalln("No files to serve - exiting")
+	}
+
 	// Parse files
 	args := flag.Args()
 	fileSystem := modules.NewSelectedFileSystem(flag.NArg())
