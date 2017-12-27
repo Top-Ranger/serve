@@ -124,3 +124,43 @@ func stringSliceComparison(A, B []string) bool {
 	}
 	return true
 }
+
+func TestStringSliceComparison(t *testing.T) {
+    if !stringSliceComparison([]string{"cake", "cookie", "biscuit"}, []string{"cake", "cookie", "biscuit"}) {
+        t.Error()
+    }
+    if stringSliceComparison([]string{"cake", "cookie"}, []string{"cake", "cookie", "biscuit"}) {
+        t.Error()
+    }
+    if stringSliceComparison([]string{"cake", "cookie", "biscuit"}, []string{"cake", "cookie"}) {
+        t.Error()
+    }
+
+    // Test different capacity
+    A := make([]string, 0, 10)
+    B := make([]string, 0, 100)
+    C := make([]string, 0, 3)
+
+    A = append(A, "cake", "cookie", "biscuit")
+    B = append(B, "cake", "cookie", "biscuit")
+    C = append(C, "cake", "cookie")
+
+    if !stringSliceComparison(A, B) {
+        t.Error()
+    }
+    if stringSliceComparison(A, C) {
+        t.Error()
+    }
+    if !stringSliceComparison(B, A) {
+        t.Error()
+    }
+    if stringSliceComparison(B, C) {
+        t.Error()
+    }
+    if stringSliceComparison(C, A) {
+        t.Error()
+    }
+    if stringSliceComparison(C, B) {
+        t.Error()
+    }
+}
