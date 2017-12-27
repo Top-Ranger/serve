@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 )
@@ -26,7 +27,6 @@ func (sfs *SelectedFileSystem) AddFile(name string) error {
 		sfs.files = make([]string, 0, 0)
 	}
 	name = cleanPathName(name)
-	log.Println("Adding", name)
 
 	// Check if file exists
 	stat, err := os.Stat(name)
@@ -41,6 +41,8 @@ func (sfs *SelectedFileSystem) AddFile(name string) error {
 		log.Println(err)
 		return err
 	}
+
+	log.Println("Adding", url.PathEscape(name))
 
 	sfs.files = append(sfs.files, name)
 	return nil
