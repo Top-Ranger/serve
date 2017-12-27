@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -64,10 +65,13 @@ func (sfs SelectedFileSystem) Open(name string) (http.File, error) {
 }
 
 // Cleans the path.
-// Currently only cleans leading slashes.
 func cleanPathName(path string) string {
+	path = filepath.Clean(path)
 	for strings.HasPrefix(path, "/") {
 		path = path[1:]
+	}
+	for strings.HasPrefix(path, "./") {
+		path = path[2:]
 	}
 	return path
 }
