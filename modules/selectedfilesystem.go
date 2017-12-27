@@ -28,6 +28,11 @@ func (sfs *SelectedFileSystem) AddFile(name string) error {
 		sfs.files = make([]string, 0, 0)
 	}
 	name = cleanPathName(name)
+	if strings.Contains(name, "../") {
+		err := errors.New(fmt.Sprint("Error adding file ", name, ": Final path must not contain '../'"))
+		log.Println(err)
+		return err
+	}
 
 	// Check if file exists
 	stat, err := os.Stat(name)
