@@ -1,6 +1,8 @@
 package modules
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -26,9 +28,17 @@ func (sfs *SelectedFileSystem) AddFile(name string) error {
 	name = cleanPathName(name)
 	log.Println("Adding", name)
 
-	_, err := os.Stat(name)
+	// Check if file exists
+	stat, err := os.Stat(name)
 	if err != nil {
 		log.Println("Error adding file", name, ":", err)
+		return err
+	}
+
+	// Check if it is a regular file
+	if !stat.Mode().IsRegular() {
+		err := errors.New(fmt.Sprint("Error adding file ", name, ": File is not a regular file"))
+		log.Println(err)
 		return err
 	}
 

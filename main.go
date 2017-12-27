@@ -25,14 +25,14 @@ func main() {
 	for _, arg := range args {
 		err := fileSystem.AddFile(arg)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("Fatal error - can not start server: ", err)
 		}
 	}
 
 	// Check parameter
 	if port < 1024 || port > 65535 {
-            log.Fatal("Please specify a valid port between 1024 and 65535")
-        }
+		log.Fatal("Please specify a valid port between 1024 and 65535")
+	}
 
 	// Prepare server
 	portString := fmt.Sprint(":", port)

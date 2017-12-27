@@ -81,6 +81,12 @@ func TestAddFile(t *testing.T) {
 		t.Error("Test fail: No error for non existing file")
 	}
 
+	// Test non-existent file
+	err = sfs.AddFile("../modules/")
+	if err == nil {
+		t.Error("Test fail: No error for adding directory")
+	}
+
 }
 
 func TestOpen(t *testing.T) {
