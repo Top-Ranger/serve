@@ -11,11 +11,13 @@ import (
 
 // Default options
 var (
-	port int = 8080
+	port  int  = 8080
+	getIp bool = true
 )
 
 func main() {
 	flag.IntVar(&port, "port", port, "Port on which the server is listening")
+	flag.BoolVar(&getIp, "getip", getIp, "Enables / disables public ip lookup")
 
 	flag.Parse()
 
@@ -39,7 +41,19 @@ func main() {
 	fileServer := http.FileServer(fileSystem)
 
 	// Output of server info
-	log.Println("Server listening at", portString)
+	log.Print("Server reachable at http://localhost", portString, "/")
+	if getIp {
+		go func() {
+			ip, err := modules.GetPublicIp()
+			if err != nil {
+				log.Println("Can not look up public IP:", err)
+			} else {
+				log.Print("Server publicly reachable at http://", ip, portString, "/")
+			}
+		}()
+	} else {
+		log.Println("Public IP lookup disabled")
+	}
 
 	log.Print(http.ListenAndServe(portString, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.RemoteAddr, ":", r.URL, "(", r.Method, ")")
