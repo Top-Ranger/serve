@@ -1,3 +1,6 @@
+// Copyright (c) 2017 Marcus Soll
+// SPDX-License-Identifier: MIT
+
 package modules
 
 import (
