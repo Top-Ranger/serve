@@ -29,7 +29,7 @@ serve --help
 
 # File list
 On default a list of files is shown on '/', e.g. 'http://XXX.XXX.XXX.XXX:8080/'. To disable this use
-``
+```
 serve -filelist=false
 ```
 
