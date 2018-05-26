@@ -1,4 +1,4 @@
-// Copyright (c) 2017 Marcus Soll
+// Copyright (c) 2017,2018 Marcus Soll
 // SPDX-License-Identifier: MIT
 
 package main
@@ -8,19 +8,26 @@ import (
 
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 )
 
+const (
+	fileTemplate = "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>Files shared</title></head><body></body><h1>Files shared</h1><ul>{{range .}}<li><a href=\"./{{.}}\">{{.}}</a></li>{{end}}</ul></html>"
+)
+
 // Default options
 var (
-	port  int  = 8080
-	getIp bool = true
+	port         int  = 8080
+	getIp        bool = true
+	showFilelist bool = true
 )
 
 func main() {
 	flag.IntVar(&port, "port", port, "Port on which the server is listening")
 	flag.BoolVar(&getIp, "getip", getIp, "Enables / disables public ip lookup")
+	flag.BoolVar(&showFilelist, "filelist", showFilelist, "Enables / disables file list at root")
 
 	flag.Parse()
 
@@ -63,7 +70,21 @@ func main() {
 	}
 
 	log.Print(http.ListenAndServe(portString, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println(r.RemoteAddr, ":", r.URL, "(", r.Method, ")")
-		fileServer.ServeHTTP(w, r)
+		if showFilelist && r.URL.EscapedPath() == "/" {
+			log.Println(r.RemoteAddr, ":", r.URL, "(", r.Method, ")", "; Action: Showing file list")
+			templateStruct := template.New("")
+			templateStruct, err := templateStruct.Parse(fileTemplate)
+			if err != nil {
+				log.Panicln(err)
+			}
+
+			err = templateStruct.Execute(w, fileSystem.GetFiles())
+			if err != nil {
+				log.Panicln(err)
+			}
+		} else {
+			log.Println(r.RemoteAddr, ":", r.URL, "(", r.Method, ")")
+			fileServer.ServeHTTP(w, r)
+		}
 	})))
 }

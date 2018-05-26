@@ -1,4 +1,4 @@
-// Copyright (c) 2017 Marcus Soll
+// Copyright (c) 2017,2018 Marcus Soll
 // SPDX-License-Identifier: MIT
 
 package modules
@@ -82,4 +82,10 @@ func cleanPathName(path string) string {
 		path = path[2:]
 	}
 	return path
+}
+
+func (sfs SelectedFileSystem) GetFiles() []string {
+	new_filelist := make([]string, 0, len(sfs.files))
+	new_filelist = append(new_filelist, sfs.files...)
+	return new_filelist
 }

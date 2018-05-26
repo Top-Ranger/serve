@@ -1,4 +1,4 @@
-// Copyright (c) 2017 Marcus Soll
+// Copyright (c) 2017,2018 Marcus Soll
 // SPDX-License-Identifier: MIT
 
 package modules
@@ -165,5 +165,27 @@ func TestStringSliceComparison(t *testing.T) {
 	}
 	if stringSliceComparison(C, B) {
 		t.Error()
+	}
+}
+
+func TestGetFiles(t *testing.T) {
+	sfs := NewSelectedFileSystem(10)
+
+	// Add 1 file
+	err := sfs.AddFile("selectedfilesystem_test.go")
+	if err != nil {
+		t.Error(err)
+	}
+	if !stringSliceComparison(sfs.GetFiles(), []string{"selectedfilesystem_test.go"}) {
+		t.Error("files are not matching after 1 add")
+	}
+
+	// Add more files
+	err = sfs.AddFile("selectedfilesystem.go")
+	if err != nil {
+		t.Error(err)
+	}
+	if !stringSliceComparison(sfs.GetFiles(), []string{"selectedfilesystem_test.go", "selectedfilesystem.go"}) {
+		t.Error("files are not matching after 2 adds")
 	}
 }
