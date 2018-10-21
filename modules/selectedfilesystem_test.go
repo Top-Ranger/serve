@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestcleanPathName(t *testing.T) {
+func TestCleanPathName(t *testing.T) {
 	// Clean name
 	if "main.go" != cleanPathName("main.go") {
 		t.Error("Error while cleaning clean name")

@@ -4,13 +4,13 @@
 package main
 
 import (
-	"github.com/Top-Ranger/serve/modules"
-
 	"flag"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/Top-Ranger/serve/modules"
 )
 
 const (
@@ -19,14 +19,14 @@ const (
 
 // Default options
 var (
-	port         int  = 8080
-	getIp        bool = true
-	showFilelist bool = true
+	port         = 8080
+	getIP        = true
+	showFilelist = true
 )
 
 func main() {
 	flag.IntVar(&port, "port", port, "Port on which the server is listening")
-	flag.BoolVar(&getIp, "getip", getIp, "Enables / disables public ip lookup")
+	flag.BoolVar(&getIP, "getip", getIP, "Enables / disables public ip lookup")
 	flag.BoolVar(&showFilelist, "filelist", showFilelist, "Enables / disables file list at root")
 
 	flag.Parse()
@@ -56,9 +56,9 @@ func main() {
 
 	// Output of server info
 	log.Print("Server reachable at http://localhost", portString, "/")
-	if getIp {
+	if getIP {
 		go func() {
-			ip, err := modules.GetPublicIp()
+			ip, err := modules.GetPublicIP()
 			if err != nil {
 				log.Println("Can not look up public IP:", err)
 			} else {

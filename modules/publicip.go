@@ -11,9 +11,9 @@ import (
 // Constant holding the URL for the IP lookup
 const ipGetAddress = "https://api.ipify.org/"
 
-// Looks up the current public ip and returns it as a  string.
+// GetPublicIP looks up the current public ip and returns it as a  string.
 // The method will block while doing the lookup.
-func GetPublicIp() (string, error) {
+func GetPublicIP() (string, error) {
 	resp, err := http.Get(ipGetAddress)
 	if err != nil {
 		return "", err
