@@ -35,4 +35,4 @@ serve -filelist=false
 
 # License
 
-MIT. See LICENSE
+APACHE-2.0. See LICENSE
