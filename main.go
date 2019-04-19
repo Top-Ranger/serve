@@ -21,6 +21,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 
 	"github.com/Top-Ranger/serve/modules"
 )
@@ -47,10 +48,17 @@ func main() {
 		log.Fatalln("No files to serve - exiting")
 	}
 
+	faviconServed := false
+
 	// Parse files
 	args := flag.Args()
 	fileSystem := modules.NewSelectedFileSystem(flag.NArg())
 	for _, arg := range args {
+		log.Println(filepath.Rel("./", arg))
+		if f, _ := filepath.Rel("./", arg); f == "favicon.ico" {
+			log.Println("Found 'favicon.ico' file - disabled serving favicon")
+			faviconServed = true
+		}
 		err := fileSystem.AddFile(arg)
 		if err != nil {
 			log.Fatal("Fatal error - can not start server: ", err)
@@ -94,6 +102,9 @@ func main() {
 			if err != nil {
 				log.Panicln(err)
 			}
+		} else if !faviconServed && r.URL.EscapedPath() == "/favicon.ico" {
+			w.WriteHeader(http.StatusOK)
+			w.Write(favicon)
 		} else {
 			log.Println(r.RemoteAddr, ":", r.URL, "(", r.Method, ")")
 			fileServer.ServeHTTP(w, r)
