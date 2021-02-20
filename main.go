@@ -16,6 +16,7 @@
 package main
 
 import (
+	_ "embed"
 	"flag"
 	"fmt"
 	"html/template"
@@ -36,6 +37,9 @@ var (
 	getIP        = true
 	showFilelist = true
 )
+
+//go:embed favicon.ico
+var favicon []byte
 
 func main() {
 	flag.IntVar(&port, "port", port, "Port on which the server is listening")
